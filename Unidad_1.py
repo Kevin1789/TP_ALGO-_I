@@ -15,6 +15,10 @@ Cuando la palabra es ingresada por el usuario debe validarse que esté
 compuesta sólo por letras, no están permitidos los números, espacios ni ningún
 carácter especial, y que sea de la longitud correcta para el turno.
 """
+
+#ayuddaaaaa
+#no se que estoy haciendo TT
+
 #recibe un lista con posicion, palabra y su informacion
 def palabras_a_jugar ():
     #import unidad 3
