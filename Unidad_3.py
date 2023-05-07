@@ -70,6 +70,7 @@ rosco, descripciones = generar_rosco(lista_palabras2, dicc_rosco2, descp_palabra
 print(rosco)
 print(descripciones)
 
+#casa
 
 
 def ordenar_rosco(list_rosco):
