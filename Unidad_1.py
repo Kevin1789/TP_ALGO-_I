@@ -70,16 +70,6 @@ def agregar_lista (lista_2, aciertos):
     return lista_2
 
 
-def mostrar_tablero_2(lista_2):
-    n1 = lista_2[0]
-    n2 = lista_2[1]
-    n3 = lista_2[2]
-    print(f"""[{n1}][{n2}][{n3}]""")
-    return n1, n2, n3
-    
-#errores_aciertos(lista_2)
-
-
 def mostrar_tablero_3 (acirtos, errores):
     print(f"""
 aciertos: {aciertos}
