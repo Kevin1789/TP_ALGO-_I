@@ -86,3 +86,5 @@ def total_palabras(dicc_candidatas):
 
 #ordenar_dicc_candidatas_letra(dicc_candidatas_letra(dicc_candidatas(generar_diccionario(invocar_lista()))))
 #total_palabras(dicc_candidatas(generar_diccionario(invocar_lista())))
+
+#hola pruebas desde arch n.n 
