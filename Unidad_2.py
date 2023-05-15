@@ -104,5 +104,14 @@ def total_palabras(dicc_candidatas_letra):
     return print("Total de palabras: ", total_palabras)
 #print(total_palabras(dicc_candidatas_letra(dicc_candidatas(generar_diccionario(invocar_lista())))))
 
-#import doctest
-#print(doctest.testmod())
+#dicc_candidatas_a= {"casa","palo","combate","comer","com"}
+def total_palabras(dicc_candidatas):
+    total_palabras = len(dicc_candidatas)
+    #print(f"Total de palabras: {total_palabras}")
+    return total_palabras
+
+#total_palabras(dicc_candidatas_a)
+#print(total_palabras(dicc_candidatas(generar_diccionario(invocar_lista()))))
+
+#ordenar_dicc_candidatas_letra(dicc_candidatas_letra(dicc_candidatas(generar_diccionario(invocar_lista()))))
+#total_palabras(dicc_candidatas(generar_diccionario(invocar_lista())))
