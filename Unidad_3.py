@@ -22,67 +22,67 @@ def palabras_participantes():
     from Unidad_2 import invocar_lista, generar_diccionario, dicc_candidatas
     lista_palabras = dicc_candidatas(generar_diccionario(invocar_lista()))
     return lista_palabras
-
 #print(palabras_participantes())
 
-#print(descripcion_palabras())
+def seleccionar_palabras(palabras_participantes):
+    """
+    Esta función selecciona las palabras candidatas para formar el rosco.
+    >>> seleccionar_palabras({"palabra1": "definición1", "palabra2": "definición2"})
+    {'p': 'palabra1'}
 
-#el rosco es una lista de 10 palabras, una por cada letra del abecedario que no se repiten
-#lista_palabras2 = {"casa": "donde vives", "cama": "donde duermes", "perro": "animal", "gato": "animal", "raton": "animal", "pajaro": "animal", "pato": "animal", "caballo": "animal", "vaca": "animal", "oveja": "pastor"}
-list_rosco = []
-descp_palabras = []
-def generar_rosco(lista_palabras, list_rosco, descp_palabras):
-    letras_utilizadas = set()
-    palabras_seleccionadas = 0
-    for palabra in lista_palabras:
-        if palabras_seleccionadas == 10:
-            return list_rosco
-        if palabra[0] not in letras_utilizadas:
-            list_rosco.append(palabra)
-            letras_utilizadas.add(palabra[0])
-            palabras_seleccionadas += 1
-        descp_palabras.append(lista_palabras[palabra])
-    if palabras_seleccionadas < 10:
-        list_rosco = None
-    return list_rosco , descp_palabras
+    """
+    palabras_seleccionadas = {}
+    letras = []
+    for clave, valor in palabras_participantes.items():
+        letras.append(clave[0])
+    letras = list(set(letras))
+    letras.sort()
+    for i in letras:
+        palabras_seleccionadas[i] = []
+    for clave, valor in palabras_participantes.items():
+        palabras_seleccionadas[clave[0]].append(clave)
+    for clave, valor in palabras_seleccionadas.items():
+        palabras_seleccionadas[clave] = valor[0]
+    return palabras_seleccionadas
+#print("prueba1",seleccionar_palabras(palabras_participantes()))
 
+def palabras_a_jugar(palabraS_seleccionada):
+    """
+    Esta función selecciona las palabras candidatas para formar el rosco.
+    >>> palabras_a_jugar({"p": "palabra1"})
+    ['palabra1']
 
-lista_palabras2 = {"casa": "donde vives", "cama": "donde duermes", "perro": "animal", "gato": "animal", "raton": "animal", "pajaro": "animal", "pato": "animal", "caballo": "animal", "vaca": "animal", "oveja": "pastor"}
+    """
+    palabras = []
+    for clave, valor in palabraS_seleccionada.items():
+        palabras.append(valor)
+    return palabras
+#print("prueba2",palabras_a_jugar(seleccionar_palabras(palabras_participantes())))
 
-dicc_rosco2 = {}
-descp_palabras2 = {}
+#crea una funcion que eliga al azar 10 palabras de la lista de palabras a jugar 
+def diez(palabras):
+    import random
+    diez_palabras = []
+    for i in range(10):
+        palabra = random.choice(palabras)
+        diez_palabras.append(palabra)
+        palabras.remove(palabra)
+    diez_palabras.sort()
+    return diez_palabras
+#print("prueba3",diez(palabras_a_jugar(seleccionar_palabras(palabras_participantes()))))
 
-def generar_rosco(lista_palabras2, dicc_rosco2, dicc_descripciones2):
-    letras_utilizadas = set()
-    palabras_seleccionadas = 0
-    for palabra, descripcion in lista_palabras2.items():
-        if palabras_seleccionadas == 10:
-            return dicc_rosco2, dicc_descripciones2
-        if palabra[0] not in letras_utilizadas:
-            dicc_rosco2[palabra] = None
-            dicc_descripciones2[palabra] = descripcion
-            letras_utilizadas.add(palabra[0])
-            palabras_seleccionadas += 1
-    if palabras_seleccionadas < 10:
-        dicc_rosco2 = None
-    return dicc_rosco2, dicc_descripciones2
-rosco, descripciones = generar_rosco(lista_palabras2, dicc_rosco2, descp_palabras2)
-print(rosco)
-print(descripciones)
+def inicial_de_las_diez (diez_palabras):
+    """
+    Esta función selecciona las palabras candidatas para formar el rosco.
+    >>> inicial_de_las_diez(["palabra1", "palabra2", "palabra3", "palabra4", "palabra5", "palabra6", "palabra7", "palabra8", "palabra9", "palabra10"])
+    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p']
 
-#casa
+    """
+    iniciales = []
+    for i in diez_palabras:
+        iniciales.append(i[0])
+    return iniciales
+#print("prueba4",inicial_de_las_diez(diez(palabras_a_jugar(seleccionar_palabras(palabras_participantes())))))
 
-
-def ordenar_rosco(list_rosco):
-    list_rosco.sort()
-    return list_rosco
-
-#print(ordenar_rosco(generar_rosco(palabras_participantes(), list_rosco)))
-
-def rosco_2(list_rosco):
-    rosco_2 = []
-    for i in list_rosco:
-        rosco_2.append(i[0])
-    return rosco_2
-
-#print(rosco_2(list_rosco))
+#import doctest
+#doctest.testmod()
