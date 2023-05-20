@@ -16,31 +16,24 @@ compuesta sólo por letras, no están permitidos los números, espacios ni ning�
 carácter especial, y que sea de la longitud correcta para el turno.
 """
 
-#ayuddaaaaa
-#no se que estoy haciendo TT
-dicc = {"casa": "lugar donde vives", "perro": "animal domestico", "gato": "animal domestico"}
+"""Importamos el diccionario que necesitamos"""
+import diccionario_etapa1
 
-def agregar_lista(lista_2,aciertos,errores):
-    #aciertos, errores
-    for i in range(len(lista_2)):
-        if i < aciertos:
-            if lista_2[i] == " ":
-                lista_2[i] = "c"
-        elif i < aciertos + errores:
-            if lista_2[i] == " ":
-                lista_2[i] = "e"
-        else:
-            if lista_2[i] == " ":
-                lista_2[i] = " "
-    return lista_2
+"""
+En esta funcion imprimimos lo que el usuario vizualiza(aciertos, errores, indicador de posicion actual, letras a jugar, "a" o "e" depende de lo que ingreso el usuario)
+"""
+def mostrar_tablero(aciertos, errores, posicion, lista, lista_2):
+    print(f"""[{lista[0]}][{lista[1]}][{lista[2]}]\n[{lista_2[0]}][{lista_2[1]}][{lista_2[2]}]
+{' ' * (posicion * 3 + 1)}^
+Aciertos: {aciertos}
+Errores: {errores}""")
 
-def mostrar_tablero_3(aciertos, errores, posicion, lista, lista_2):
-    print(f"[{lista[0]}][{lista[1]}][{lista[2]}]")
-    print(f"[{lista_2[0]}][{lista_2[1]}][{lista_2[2]}]")
-    print(" " * (posicion * 3 + 1) + "^")
-    print(f"Aciertos: {aciertos}")
-    print(f"Errores: {errores}")
-
+"""
+En esta funcion lo que hacemos es pedir al usuario que ingrse una palabra, si la palabra esta en mayuscula o algun caracter esta en mayuscula, lo convertimos a
+minuscula paara que no haya errores a la hora de igualar la palabra que ingreso con la palabra del diccionario que se esta jugando.
+En el While lo que hacemos es fijarnos si el usuario ingreso solo caracteres alfabeticos, si no es asi se le pide ingresar nuevamente una palabra,
+asi hasta que el ingreso sea valido.
+"""
 def ingresar_palabra():
     ingreso_usuario = input("Ingresa palabra: ").lower()
     while not ingreso_usuario.isalpha():
@@ -48,74 +41,68 @@ def ingresar_palabra():
         ingreso_usuario = input("Ingrese palabra: ").lower()
     return ingreso_usuario
 
-def puntaje(aciertos):
-    return aciertos
+"""
+Lo que hace esta funcion es evaluar si la palabra ingresada por el usuario es correcta o erronea, devuelve "a" por acierto y "e" por error
+"""
+def evaluar_palabra(palabra_ingresada, clave):
+    return "a" if palabra_ingresada == clave else "e"
 
-def pasapalabra():
-    puntaje_total = 0 
-    aciertos = 0
-    errores = 0
-    lista_2 = [" ", " ", " "]
-    posicion = 0
-    lista_palabras_ingresadas = [] # nueva variable para almacenar las palabras ingresadas por el usuario
+"""
+Esta funcion recibe 7 parametros (cantidad de aciertos hasta el momento, cant errores hasta el momento, posicion actual en el tablero, una lista con las letras a jugar,
+una 2da lista que contiene los aciertos y errores que se van cometiendo, la palabra que el usuario debe adivinar, la definicion que se le da al usuario como pista).
+La función muestra el tablero, el turno actual y la longitud de la palabra a adivinar.
+Despues solicita al usuario que ingrese una palabra llamando a la funcion Ingresar_palabra()
+Despues verifica si la palabra es correcta o incorrecta llamando a la funcion Evaluar_palabra(palabra_ingresada, clave).
+Dependiendo lo que devuelva la funcion Evaluar_palabra, se actualizara el tablero y los contadores de aciertos y errores.
+La funcion retorna los nuevos valores de aciertos, errores y palabra_ingresada
+"""
+def jugar_turno(aciertos, errores, posicion, lista, lista_2, clave, definicion):
+    letra = clave[0]
+    longitud = len(clave)
 
-    for clave, valor in dicc.items():
-        palabra = clave
-        longitud = len(palabra)
-        definicion = valor
-        letra = clave[0]
-        lista = [" ", " ", " "]
+    mostrar_tablero(aciertos, errores, posicion, lista, lista_2)
+    print(f"Turno letra: {letra} Longitud palabra: {longitud}\nDefinicion: {definicion}")
 
-        for letra_1, clave_1 in enumerate(dicc.keys()):
-            lista[letra_1] = clave_1[0]
+    palabra_ingresada = ingresar_palabra()
+    resultado = evaluar_palabra(palabra_ingresada, clave)
+    lista_2[posicion] = resultado
 
-        mostrar_tablero_3(aciertos, errores, posicion, lista, lista_2)
-        print(f"Turno letra: {letra} Longitud palabra: {longitud}")
-        print(f"Definicion: {definicion}")
+    if resultado == "a":
+        aciertos += 1
+    else:
+        errores += 1
 
-        if posicion == 0:
-            palabra_ingresada_1 = ingresar_palabra() # Cambio de nombre para evitar conflicto con la función
-            lista_palabras_ingresadas.append(palabra_ingresada_1) # agregar la palabra ingresada a la lista de palabras ingresadas
-            if palabra_ingresada_1 == clave:
-                aciertos += 1
-                lista_2[posicion] = "a"
-                posicion += 1
-                print(f"Turno letra: {letra} - Palabra de {longitud} - {palabra_ingresada_1} - acierto")
-            else:
-                errores += 1
-                lista_2[posicion] = "e"
-                posicion += 1
-                print(f"Turno letra: {letra} - Palabra de {longitud} - {palabra_ingresada_1} - error - Palabra correcta: {clave}")
-        else:
-            palabra_ingresada_2 = ingresar_palabra() # Cambio de nombre para evitar conflicto con la función
-            lista_palabras_ingresadas.append(palabra_ingresada_2) # agregar la palabra ingresada a la lista de palabras ingresadas
-            if palabra_ingresada_2 == clave:
-                aciertos += 1
-                lista_2[posicion] = "a"
-                posicion += 1
-                print(f"Turno letra: {letra} - Palabra de {longitud} - {palabra_ingresada_2} - acierto")
-            else:
-                errores += 1
-                lista_2[posicion] = "e"
-                posicion += 1
-                print(f"Turno letra: {letra} - Palabra de {longitud} - {palabra_ingresada_2} - error")
+    return aciertos, errores, palabra_ingresada
 
-    # Resumen de la partida
+"""
+En esta funcion como su nombre lo dice, muestra un resumen de la partida con los parametros que recibe.
+Muetsra como encabezado RESUMEN DE LA PARTIDA separado por 50 "-".
+Despues iteramos el diccionario con un enumerate para obetener tanto el indice como la clave del diccionario importado.
+dentro del for lo que hacemos es (sacar la letra inicial de la palabra, su respectiva longitud, una correccion si en caso el ususario se equivoco en una
+de las palabras, igualamos la palabra del jugador a la lista de las palabras que ingreso el jugador, despues en el resultado, devuele "acierto" si 
+la lista de aciertos es igual a "a" de lo contrario "error", depsues imprimimos los resultados) Todo esto en cada una de las iteraciones.
+"""
+def mostrar_resumen(diccionario, lista_palabras_ingresadas, lista_2):
     print("\n--- Resumen de la Partida ---")
     print("-" * 50)
-    for i, (clave, valor) in enumerate(dicc.items()):
+    for i, clave in enumerate(diccionario.keys()):
         letra = clave[0]
-        longitud = len(clave)
-        palabra_correcta = clave
-        palabra_ingresada = lista_palabras_ingresadas[i] # nueva variable para almacenar la palabra ingresada por el usuario
-        resultado = "acierto" if lista_2[i] == "a" else "error"
-        if resultado == "error":
-            print(f"Turno de la letra: {letra} - Palabra de {longitud} letras - {palabra_ingresada} - {resultado} - Palabra correcta es : {palabra_correcta}")
+        long = len(clave)
+        correccion = clave
+        palabra_jugador = lista_palabras_ingresadas[i]
+        result = "acierto" if lista_2[i] == "a" else "error"
+        if result == "error":
+            print(f"Turno de la letra: {letra} - Palabra de {long} letras - {palabra_jugador} - {result} - Palabra correcta es : {correccion}")
         else:
-            print(f"Turno de la letra: {letra} - Palabra de {longitud} letras - {palabra_ingresada} - {resultado}")
+            print(f"Turno de la letra: {letra} - Palabra de {long} letras - {palabra_jugador} - {result}")
     print("-" * 50)
 
-    puntaje_total = puntaje(aciertos)
-    print(f"\nPuntaje total: {puntaje_total}")
 
-pasapalabra()
+
+
+
+"""
+En esta funcion multiplicamos la cantidad de aciertos por 10 y retornamos ese valor
+"""
+def calcular_puntaje(aciertos):
+    return aciertos * 10

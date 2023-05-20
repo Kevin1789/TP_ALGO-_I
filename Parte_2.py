@@ -1,76 +1,140 @@
-def invocar_diccionario():
-    from datos import obtener_lista_definiciones
-    lista = obtener_lista_definiciones()
-    return lista
+from datos import obtener_lista_definiciones
 
-def sin_acentos(lista):
+"""
+La funcion recibe como parametro una cadena de 
+caracteres y la devuelve sin acento
+"""
+def palabra_sin_acento(palabra):
     """
-    Esta función reemplaza las vocales con acentos por vocales sin acentos.
-    >>> sin_acentos([["víveres","1.  m. pl. Provisiones de boca de un ejército plaza o buque"],["unificación","1.  f. Acción y efecto de unificar"]])
-    [['viveres', '1.  m. pl. Provisiones de boca de un ejército plaza o buque'], ['unificacion', '1.  f. Acción y efecto de unificar']]
+    >>> palabra_sin_acento('álbum')
+    'album'
+    >>> palabra_sin_acento('ácido')
+    'acido'
+    >>> palabra_sin_acento('brócoli')
+    'brocoli'
+    >>> palabra_sin_acento('transformó')
+    'transformo'
+    >>> palabra_sin_acento('préstamelo')
+    'prestamelo'
     """
-    vocales_con_acentos = "áéíóú"
-    vocales_sin_acentos = "aeiou"
-    for i in range(len(lista)):
-        palabra = lista[i][0]
-        for j in range(len(vocales_con_acentos)):
-            palabra = palabra.replace(vocales_con_acentos[j], vocales_sin_acentos[j])
-        lista[i][0] = palabra
-    return lista
-#print(sin_acentos(invocar_diccionario()))
+    vocales = "aeiou"
+    vocales_con_acento = "áéíóú"
+    for letra in range(len(vocales)):
+        palabra = palabra.replace(vocales_con_acento[letra], vocales[letra])
+    return palabra
 
-def filtrar_palabras(lista_filtra):
-    """
-    Esta funcion filtra las palabras que tienen mas de 5 letras
-    >>> filtrar_palabras([["palabra1", "definición1"], ["palabra2", "definición2"]])
-    {'palabra1': 'definición1', 'palabra2': 'definición2'}
-    """
-    diccionario_rosco = {}
+"""
+La funcion necesitara llamar una funcion 
+del archivo "datos", con la cual realizara 
+un filtrado de palabras.
+La funcion devuelve una lista de listas
+"""
+def filtrar_lista():
+    lista_definiciones = obtener_lista_definiciones()
     LONG_MIN = 5
-    for sublistas in lista_filtra:
-        if len(sublistas[0]) >= LONG_MIN:
-            diccionario_rosco[sublistas[0]] = sublistas[1]
-    return diccionario_rosco
-#print(filtrar_palabras(sin_acentos(invocar_diccionario())))
+    lista_definiciones = [[palabra_sin_acento(palabra), definicion] \
+            for palabra, definicion in lista_definiciones \
+                    if (len(palabra) >= LONG_MIN)]
+    return sorted(lista_definiciones, key=lambda x: x[0].replace("ñ", "n~"))
 
-#D 
-def contar_letras_de_palabras(diccionario_rosco):
-    """
-    Esta funcion cuenta la cantidad de palabras que hay en el diccionario por letra inicial
-    >>> contar_letras_de_palabras({'palabra1': 'definición1', 'palabra2': 'definición2'})
-    {'p': 2}
-    """
-    dicc_candidatas_letra = {}
-    for clave, valor in diccionario_rosco.items():
-        if clave[0] not in dicc_candidatas_letra:
-            dicc_candidatas_letra[clave[0]] = 1
+
+
+"""
+La funcion llamara a la funcion "filtrar_lista",
+la cual devuelve una lista de lista ya cargada.
+La funcion "cargar_datos_para_rosco" devuelve un
+diccionario con clave: letra y valor: una lista de
+listas de [palabra, definicion]
+"""
+def cargar_datos_para_rosco():
+    diccionario_rosco = {}
+    lista_definiciones = filtrar_lista()
+
+    for palabra, definicion in lista_definiciones:
+        letra = palabra[0]
+        lista_palabra_definicion = [palabra, definicion]
+        if (letra not in diccionario_rosco):
+            diccionario_rosco[letra] = [lista_palabra_definicion]
         else:
-            dicc_candidatas_letra[clave[0]] += 1
-    return dicc_candidatas_letra
-#print(contar_letras_de_palabras(filtrar_palabras(sin_acentos(invocar_diccionario()))))
+            diccionario_rosco[letra].append(lista_palabra_definicion)
 
-def ordenar_contar_letras(dicc_candidatas_letra):
-    """
-    Esta función ordena el diccionario de palabras candidatas a adivinar por letra.
-    >>> ordenar_contar_letras({"p": 2})
-    letra: p - cantidad: 2
-    """
-    for clave, valor in sorted(dicc_candidatas_letra.items()):
-        print("letra:", clave, "-", "cantidad:", valor)
-    return
-#print(ordenar_contar_letras(contar_letras_de_palabras(filtrar_palabras(sin_acentos(invocar_diccionario())))))
+    return diccionario_rosco
 
+
+"""
+diccionario = cargar_datos_para_rosco()
+valor_a = 0
+for clave, valor in diccionario.items():
+    valor_a += len(valor)
+    print("letra:", clave)
+
+print(len(diccionario), "letras presentes")   
+print(valor_a, "palabras presentes")
+
+"""
+
+
+"""
+La funcion recibe como parametro un diccionario,
+con sus respectivos clave y valores.
+La funcion devuelve un diccionario el cual tiene,
+como clave una letra y como valor la cantidad de 
+listas [palabra, definicion] que contenia el 
+diccionario recibido en el parametro
+"""
 def contar_palabras(diccionario_rosco):
     """
-    Esta funcion cuenta la cantidad de palabras que hay en el diccionario
-    >>> contar_palabras({'palabra1': 'definición1', 'palabra2': 'definición2'})
-    Total de palabras:  2
+    >>> contar_palabras({"g": [["gasto", "1.  m. Acción de gastar"] ,\
+            ["generar","1.  tr. Producir causar algo"]]})
+    {'g': 2}
+    >>> contar_palabras({"h": [["hache","1. f. Letra "], \
+        ["hojuela","1.  f. Fruta de sartén muy extendida y delgada"],\
+        ["hilada","1.  f. Formación en línea"]]})
+    {'h': 3}
     """
-    total_palabras = 0
-    for clave, valor in diccionario_rosco.items():
-        total_palabras += 1
-    return print("Total de palabras: ", total_palabras)
-#print(contar_palabras(filtrar_palabras(sin_acentos(invocar_diccionario()))))
+    letra_cantidad = {}
+    for letra in diccionario_rosco:
+        cant_palabra = len(diccionario_rosco[letra])
+        letra_cantidad[letra] = cant_palabra
+    return letra_cantidad
 
+"""
+La funcion recibe como parametro un diccionario,
+con sus respectivos clave y valor.
+La funcion devuelve el total de la suma de valores
+que contenia el diccionario recibido.
+"""
+def sumar_valores(letra_cantidad):
+    """
+    >>> sumar_valores({"l": 20, "m": 40, "n": 2, "o" : 1})
+    63
+    >>> sumar_valores({"a": 2, "b": 22, "c": 5, "d": 56})
+    85
+    >>> sumar_valores({"a": 22, "b": 5, "c": 14, "g": 4, "h": 6})
+    51
+    """
+    totalsuma = 0
+    for cantidad in letra_cantidad.values():
+        totalsuma += cantidad
+    return totalsuma
+
+"""
+La funcion recibe dos parametros: "letras_cantidad"
+es un diccionario con clave letra y valor un numero,
+"suma_total" es un int 
+La funcion muestra por pantalla los datos de los parametros
+recibidos
+"""
+def mostrar_resultado(letras_cantidad, suma_total):
+    for letra in letras_cantidad:
+        print("La letra", letra, "tiene", letras_cantidad[letra])
+
+    print("El total de palabras presentes en el "
+        "diccionario es de:", suma_total)
+
+dicc_rosco = cargar_datos_para_rosco()
+letras_cantidad = contar_palabras(dicc_rosco)
+suma_total = sumar_valores(letras_cantidad)
+#mostrar_resultado(letras_cantidad, suma_total)
 #import doctest
 #print(doctest.testmod())
