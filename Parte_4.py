@@ -9,3 +9,27 @@ La secuencia del juego debe ser la siguiente:
 4. Luego se armará el tablero que visualizará el usuario, y dará comienzo la partida,
 implementando así, lo realizado en la etapa 1.
 """
+
+from Parte_3 import *
+
+def datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras):
+    """
+    Esta funcion integra las funcionalidades resueltas en cada una de las etapas anteriores.
+    """
+    diccionario_rosco = cargar_datos_para_rosco()
+    lista = cargar_letras()
+    palabra, definicion = cargar_palabras(diccionario_rosco, lista)
+    return lista, palabra, definicion
+print(datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras))
+
+"""
+[[palabra1],[palabra2]]
+[[definicion1],[definicion2]]
+
+=
+
+{palabra1:definicion1, palabra2:definicion2}
+
+lista 
+dicc
+"""
