@@ -22,6 +22,9 @@ from Parte_2 import cargar_datos_para_rosco
 #Funcion que retorna 10 letras aleatorias que 
 # estan ordenadas alfabeticamente 
 def cargar_letras():
+    """
+    Funcion que retorna 10 letras aleatorias que
+    """
     letras = ['a', 'b', 'c', 'd', 'e', 'f', \
             'g', 'h', 'i', 'j', 'k', 'l', 'm',\
             'n', 'ñ', 'o', 'p', 'q', 'r', 's', \
@@ -29,11 +32,11 @@ def cargar_letras():
     lista_letras = random.sample(letras, k=10)
     return sorted(lista_letras, key=lambda x: x.replace("ñ", "n~"))
 
-
-
-
 # Funcion que retorna dos listas ordenadas alfabeticamente
 def cargar_palabras(dicc_rosco, lista_letras):
+    """
+    Esta funcion retorna dos listas ordenadas alfabeticamente
+    """
     palabras = []
     definiciones = []
 
@@ -52,11 +55,11 @@ def probar_funcion(dicc_rosco):
         print(cargar_palabras(dicc_rosco, lista_letras))
 """
 
-
-
-
 #Bloque Principal
 def datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras):
+    """
+    Esta funcion es el bloque principal del programa
+    """
     diccionario_rosco = cargar_datos_para_rosco()
     lista_letras = cargar_letras()
     palabra, definicion = cargar_palabras(diccionario_rosco, lista_letras)
@@ -64,4 +67,4 @@ def datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras):
     print(palabra)
     print(definicion)
 
-datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras)
+#datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras)
