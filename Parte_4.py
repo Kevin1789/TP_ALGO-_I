@@ -20,7 +20,18 @@ def datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras):
     lista = cargar_letras()
     palabra, definicion = cargar_palabras(diccionario_rosco, lista)
     return lista, palabra, definicion
-print(datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras))
+#print(datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras))
+
+def generar_dicc(datos_rosco, cargar_datos_para_rosco, cargar_letras, cargar_palabras):
+    """
+    Esta funcion genera un diccionario con las palabras y las definiciones.
+    """
+    dicc_rosco = {}
+    lista, palabra, definicion = datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras)
+    for i in range(len(palabra)):
+        dicc_rosco[palabra[i]] = definicion[i]
+    return dicc_rosco, lista
+print(generar_dicc(datos_rosco, cargar_datos_para_rosco, cargar_letras, cargar_palabras))
 
 """
 [[palabra1],[palabra2]]

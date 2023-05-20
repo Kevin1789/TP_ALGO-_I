@@ -15,25 +15,41 @@ Cuando la palabra es ingresada por el usuario debe validarse que esté
 compuesta sólo por letras, no están permitidos los números, espacios ni ningún
 carácter especial, y que sea de la longitud correcta para el turno.
 """
+from Parte_3 import *
 
-"""Importamos el diccionario que necesitamos"""
-import diccionario_etapa1
+def datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras):
+    """
+    Esta funcion integra las funcionalidades resueltas en cada una de las etapas anteriores.
+    """
+    diccionario_rosco = cargar_datos_para_rosco()
+    lista = cargar_letras()
+    palabra, definicion = cargar_palabras(diccionario_rosco, lista)
+    return lista, palabra, definicion
+#print(datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras))
 
-"""
-En esta funcion imprimimos lo que el usuario vizualiza(aciertos, errores, indicador de posicion actual, letras a jugar, "a" o "e" depende de lo que ingreso el usuario)
-"""
-def mostrar_tablero(aciertos, errores, posicion, lista, lista_2):
-    print(f"""[{lista[0]}][{lista[1]}][{lista[2]}]\n[{lista_2[0]}][{lista_2[1]}][{lista_2[2]}]
+def generar_dicc(datos_rosco, cargar_datos_para_rosco, cargar_letras, cargar_palabras):
+    """
+    Esta funcion genera un diccionario con las palabras y las definiciones.
+    """
+    dicc_rosco = {}
+    lista, palabra, definicion = datos_rosco(cargar_datos_para_rosco, cargar_letras, cargar_palabras)
+    for i in range(len(palabra)):
+        dicc_rosco[palabra[i]] = definicion[i]
+    return dicc_rosco, lista
+#print(generar_dicc(datos_rosco, cargar_datos_para_rosco, cargar_letras, cargar_palabras))
+
+le = generar_dicc(datos_rosco, cargar_datos_para_rosco, cargar_letras, cargar_palabras)[1]
+ae = [' ' for i in range(10)]
+
+def mostrar_tablero(le, ae, posicion, aciertos, errores, turno, clave, definicion):
+    print(f"""
+[{le[0]}][{le[1]}][{le[2]}][{le[3]}][{le[4]}][{le[5]}][{le[6]}][{le[7]}][{le[8]}][{le[9]}]
+[{ae[0]}][{ae[1]}][{ae[2]}][{ae[3]}][{ae[4]}][{ae[5]}][{ae[6]}][{ae[7]}][{ae[8]}][{ae[9]}]
 {' ' * (posicion * 3 + 1)}^
 Aciertos: {aciertos}
-Errores: {errores}""")
+Errores: {errores}
+""")
 
-"""
-En esta funcion lo que hacemos es pedir al usuario que ingrse una palabra, si la palabra esta en mayuscula o algun caracter esta en mayuscula, lo convertimos a
-minuscula paara que no haya errores a la hora de igualar la palabra que ingreso con la palabra del diccionario que se esta jugando.
-En el While lo que hacemos es fijarnos si el usuario ingreso solo caracteres alfabeticos, si no es asi se le pide ingresar nuevamente una palabra,
-asi hasta que el ingreso sea valido.
-"""
 def ingresar_palabra():
     ingreso_usuario = input("Ingresa palabra: ").lower()
     while not ingreso_usuario.isalpha():
@@ -41,68 +57,49 @@ def ingresar_palabra():
         ingreso_usuario = input("Ingrese palabra: ").lower()
     return ingreso_usuario
 
-"""
-Lo que hace esta funcion es evaluar si la palabra ingresada por el usuario es correcta o erronea, devuelve "a" por acierto y "e" por error
-"""
 def evaluar_palabra(palabra_ingresada, clave):
     return "a" if palabra_ingresada == clave else "e"
 
-"""
-Esta funcion recibe 7 parametros (cantidad de aciertos hasta el momento, cant errores hasta el momento, posicion actual en el tablero, una lista con las letras a jugar,
-una 2da lista que contiene los aciertos y errores que se van cometiendo, la palabra que el usuario debe adivinar, la definicion que se le da al usuario como pista).
-La función muestra el tablero, el turno actual y la longitud de la palabra a adivinar.
-Despues solicita al usuario que ingrese una palabra llamando a la funcion Ingresar_palabra()
-Despues verifica si la palabra es correcta o incorrecta llamando a la funcion Evaluar_palabra(palabra_ingresada, clave).
-Dependiendo lo que devuelva la funcion Evaluar_palabra, se actualizara el tablero y los contadores de aciertos y errores.
-La funcion retorna los nuevos valores de aciertos, errores y palabra_ingresada
-"""
-def jugar_turno(aciertos, errores, posicion, lista, lista_2, clave, definicion):
+def jugar_turno(aciertos, errores, posicion, le, ae, turno, clave, definicion):
     letra = clave[0]
     longitud = len(clave)
-
-    mostrar_tablero(aciertos, errores, posicion, lista, lista_2)
+    mostrar_tablero(le, ae, posicion, aciertos, errores, turno, clave, definicion)
     print(f"Turno letra: {letra} Longitud palabra: {longitud}\nDefinicion: {definicion}")
-
     palabra_ingresada = ingresar_palabra()
     resultado = evaluar_palabra(palabra_ingresada, clave)
-    lista_2[posicion] = resultado
+    ae[posicion] = resultado
 
     if resultado == "a":
         aciertos += 1
     else:
         errores += 1
-
     return aciertos, errores, palabra_ingresada
 
-"""
-En esta funcion como su nombre lo dice, muestra un resumen de la partida con los parametros que recibe.
-Muetsra como encabezado RESUMEN DE LA PARTIDA separado por 50 "-".
-Despues iteramos el diccionario con un enumerate para obetener tanto el indice como la clave del diccionario importado.
-dentro del for lo que hacemos es (sacar la letra inicial de la palabra, su respectiva longitud, una correccion si en caso el ususario se equivoco en una
-de las palabras, igualamos la palabra del jugador a la lista de las palabras que ingreso el jugador, despues en el resultado, devuele "acierto" si 
-la lista de aciertos es igual a "a" de lo contrario "error", depsues imprimimos los resultados) Todo esto en cada una de las iteraciones.
-"""
-def mostrar_resumen(diccionario, lista_palabras_ingresadas, lista_2):
+def mostrar_resumen(dicc_rosco, lista_palabras_ingresadas, ae):
     print("\n--- Resumen de la Partida ---")
     print("-" * 50)
-    for i, clave in enumerate(diccionario.keys()):
+    for i, clave in enumerate(dicc_rosco.keys()):
         letra = clave[0]
         long = len(clave)
         correccion = clave
         palabra_jugador = lista_palabras_ingresadas[i]
-        result = "acierto" if lista_2[i] == "a" else "error"
+        result = "acierto" if ae[i] == "a" else "error"
         if result == "error":
             print(f"Turno de la letra: {letra} - Palabra de {long} letras - {palabra_jugador} - {result} - Palabra correcta es : {correccion}")
         else:
             print(f"Turno de la letra: {letra} - Palabra de {long} letras - {palabra_jugador} - {result}")
     print("-" * 50)
 
+def jugar_rosco(dicc_rosco, lista, ae):
+    aciertos = 0
+    errores = 0
+    lista_palabras_ingresadas = []
+    for i, clave in enumerate(dicc_rosco.keys()):
+        posicion = i
+        turno = i + 1
+        definicion = dicc_rosco[clave]
+        aciertos, errores, palabra_ingresada = jugar_turno(aciertos, errores, posicion, lista, ae, turno, clave, definicion)
+        lista_palabras_ingresadas.append(palabra_ingresada)
+    mostrar_resumen(dicc_rosco, lista_palabras_ingresadas, ae)
 
-
-
-
-"""
-En esta funcion multiplicamos la cantidad de aciertos por 10 y retornamos ese valor
-"""
-def calcular_puntaje(aciertos):
-    return aciertos * 10
+jugar_rosco(generar_dicc(datos_rosco, cargar_datos_para_rosco, cargar_letras, cargar_palabras)[0], generar_dicc(datos_rosco, cargar_datos_para_rosco, cargar_letras, cargar_palabras)[1], ae)
