@@ -10,3 +10,8 @@ no. El puntaje obtenido en la última partida, se tomará como inicio de la sigu
 inicio de la ejecución del 1er. juego, el puntaje se encuentra en cero.
 """
 
+def Puntaje_totales():
+    """
+    Esta funcion permite que el usuario obtenga puntaje y que el mismo se acumule de
+    partida tras partida.
+    """

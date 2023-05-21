@@ -118,14 +118,21 @@ def sumar_valores(letra_cantidad):
         totalsuma += cantidad
     return totalsuma
 
-"""
-La funcion recibe dos parametros: "letras_cantidad"
-es un diccionario con clave letra y valor un numero,
-"suma_total" es un int 
-La funcion muestra por pantalla los datos de los parametros
-recibidos
-"""
+
 def mostrar_resultado(letras_cantidad, suma_total):
+    """
+    La funcion recibe dos parametros: "letras_cantidad"
+    es un diccionario con clave letra y valor un numero,
+    "suma_total" es un int 
+    La funcion muestra por pantalla los datos de los parametros
+    recibidos.
+    >>> mostrar_resultado({"a": 2, "b": 22, "c": 5, "d": 56}, 85)
+    La letra a tiene 2
+    La letra b tiene 22
+    La letra c tiene 5
+    La letra d tiene 56
+    El total de palabras presentes en el diccionario es de: 85
+    """
     for letra in letras_cantidad:
         print("La letra", letra, "tiene", letras_cantidad[letra])
 
