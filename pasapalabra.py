@@ -31,12 +31,12 @@ def mostrar_tablero(lista_letras, resultados, aciertos, errores, posicion, letra
     Muestra por pantalla el estado del juego.
     """
     print(f"""
-    {''.join(f'[{letra}]' for letra in lista_letras)}
-    {''.join(f'[{resultado}]' for resultado in resultados)}
-    {' ' * (posicion * 3 + 1)}^
-    Aciertos: {aciertos}
-    Errores: {errores}
-    Turno letra: {letra} Longitud palabra: {long_palabra} \nDefinicion: {definicion}
+{''.join(f'[{letra.upper()}]' for letra in lista_letras)}
+{''.join(f'[{resultado}]' for resultado in resultados)}
+{' ' * (posicion * 3 + 1)}^
+Aciertos: {aciertos}
+Errores: {errores}
+Turno letra: {letra} Longitud palabra: {long_palabra} \nDefinicion: {definicion}
     """)
 
 def cargar_palabra():
@@ -49,8 +49,7 @@ def cargar_palabra():
 
 def verificar_palabra(palabra):
     """
-    La funcion recibe como parametro una variable, y retorna
-    la variable de tipo string 
+    La función recibe como parámetro una variable y retorna la variable de tipo string 
     """
     while not palabra.isalpha():
         print("Ingrese solo LETRAS!")

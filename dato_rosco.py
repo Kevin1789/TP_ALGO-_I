@@ -70,3 +70,4 @@ def datos_rosco():
     #print(lista_letras)
     #print(palabra)
     #print(definicion)
+#print(datos_rosco())
